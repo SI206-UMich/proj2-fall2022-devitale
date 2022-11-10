@@ -25,6 +25,23 @@ def get_listings_from_search_results(html_file):
         ('Loft in Mission District', 210, '1944564'),  # example
     ]
     """
+
+    base_path = os.path.abspath(os.path.dirname(html_file))
+
+    full_path = os.path.join(base_path, html_file)
+
+    file_obj = open(full_path, 'r')
+
+    raw_data = file_obj.read()
+
+    file_obj.close()
+
+    soup = BeautifulSoup(raw_data, "html.parser")
+
+    lst = []
+
+
+
     pass
 
 
