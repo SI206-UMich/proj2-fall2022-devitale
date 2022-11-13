@@ -69,13 +69,39 @@ def get_listing_information(listing_id):
         number of bedrooms
     )
     """
-    pass
+    html_file = f"listing_{listing_id}.html"
+
+    with open("html_files/" + html_file) as f:
+        soup = BeautifulSoup(f.read())
+    
+    ul = soup.find("ul", attrs={"class", "fhhmddr"})
+
+    polstr = ul.findAll("li")[0].text
+    polstr = [i.replace(" ", '') for i in polstr.split("\n")][2]
+
+
+    subtitle = soup.find('h2').text
+
+    room_status = None
+
+    if "private" in subtitle:
+        room_status = "Private Room"
+    elif "shared" in subtitle:
+        room_status = "Shared Room"
+    else:
+        room_status = "Entire Room"
+
+    des_list = soup.find("ol")
+    bed_desc = des_list.findAll("li")[1].getText().replace(" ", "")[2]
+    bed_desc = int(bed_desc)
+
+    return (polstr, room_status, bed_desc)
 
 
 def get_detailed_listing_database(html_file):
     """
     Write a function that calls the above two functions in order to return
-    the complete listing information using the functions you’ve created.
+    the complete listing information using the functions youve created.
     This function takes in a variable representing the location of the search results html file.
     The return value should be in this format:
 
