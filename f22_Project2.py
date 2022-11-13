@@ -26,23 +26,23 @@ def get_listings_from_search_results(html_file):
     ]
     """
 
-    base_path = os.path.abspath(os.path.dirname(html_file))
+    with open("html_files/" + html_file) as f:
+        soup = BeautifulSoup(f.read())
 
-    full_path = os.path.join(base_path, html_file)
+    lists = soup.findAll('div', attrs={"class": "c4mnd7m"})
 
-    file_obj = open(full_path, 'r')
-
-    raw_data = file_obj.read()
-
-    file_obj.close()
-
-    soup = BeautifulSoup(raw_data, "html.parser")
-
-    lst = []
-
-
-
-    pass
+    data = list()
+    for li in lists:
+        link = li.find("a")
+        title_tag = link.get("aria-labelledby")
+        id_num = title_tag.split('_')[1]
+        text = li.find("div", attrs={"id": title_tag}).text
+        text = (' '.join([i.replace(" ", '') for i in text.split("\n")]))[1:-1]
+        price = li.find("span", attrs={"class": "a8jt5op"}).text.split(' ')[0][1:]
+        price = int(price)
+        listing_data = (text, price, id_num)
+        data.append(listing_data)
+    return data
 
 
 def get_listing_information(listing_id):
