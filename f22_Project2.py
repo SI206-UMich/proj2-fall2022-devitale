@@ -152,7 +152,16 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    csv_data = "Listing Title,Cost,Listing ID,Policy Number,Place Type,Number of Bedrooms\n"
+    for listing in data:
+        for i in listing[:-1]:
+            csv_data += "i"
+            csv_data += ','
+        csv_data += listing[:-1]
+        csv_data += '\n'
+
+    with open(filename, 'w') as f:
+        f.write(csv_data)
 
 
 def check_policy_numbers(data):
@@ -174,7 +183,17 @@ def check_policy_numbers(data):
     ]
 
     """
-    pass
+    pattern1 = re.compile("20\d\d-00\d\d\d\dSTR")
+    pattern2 = re.compile("STR-000\d\d\d\d")
+
+    not_a_match = list()
+
+    for listing in data:
+        policy = listing[3]
+        if not pattern1.match(policy) and not pattern2.match(policy):
+            not_a_match.append(data[2])
+
+    return not_a_match
 
 
 def extra_credit(listing_id):
